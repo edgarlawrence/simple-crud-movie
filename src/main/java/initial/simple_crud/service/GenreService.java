@@ -7,6 +7,7 @@ import initial.simple_crud.repository.GenreRepository;
 import initial.simple_crud.service.implement.GenreImplement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -28,17 +29,20 @@ public class GenreService implements GenreImplement {
     }
 
     @Override
+    @PreAuthorize("hasRole('Super Admin')")
     public Genre addGenre(Genre genre) {
         return genreRepository.save(genre);
     }
 
     @Override
+    @PreAuthorize("hasRole('Super Admin')")
     public Genre updateGenre(Long id, GenreRequestDTO requestDTO) {
         Genre genre = genreRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         genre.setName(requestDTO.getName());
        return genreRepository.save(genre);
     }
     @Override
+    @PreAuthorize("hasRole('Super Admin')")
     public void deleteGenre(Long id) {
         Genre findGenre = genreRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         genreRepository.delete(findGenre);

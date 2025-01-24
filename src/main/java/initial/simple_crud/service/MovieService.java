@@ -9,6 +9,7 @@ import initial.simple_crud.repository.MovieRepository;
 import initial.simple_crud.service.implement.MovieImplement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -42,6 +43,7 @@ public class MovieService implements MovieImplement{
     }
 
     @Override
+    @PreAuthorize("hasRole('Super Admin')")
     public Movie addMovies(MovieRequestDTO request) {
         Movie movie = new Movie();
         movie.setTitle(request.getTitle());
@@ -53,6 +55,7 @@ public class MovieService implements MovieImplement{
     }
 
     @Override
+    @PreAuthorize("hasRole('Super Admin')")
     public Movie updateMovies(Long id, MovieRequestDTO request) {
         Movie movie = movieRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -65,6 +68,7 @@ public class MovieService implements MovieImplement{
     }
 
     @Override
+    @PreAuthorize("hasRole('Super Admin')")
     public void deleteMovie(Long id) {
         Movie movie = movieRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         movieRepository.delete(movie);
